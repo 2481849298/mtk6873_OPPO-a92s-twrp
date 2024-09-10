@@ -97,6 +97,11 @@ BOARD_VNDK_VERSION := current
     libion \
     libxml2
 
+TW_RECOVERY_ADDITIONAL_RELINK_FILES += \
+    $(TARGET_OUT_VENDOR_EXECUTABLES)/hw/android.hardware.keymaster@4.1-service \
+    $(TARGET_OUT_VENDOR_SHARED_LIBRARIES)/libkeymaster4_1device.so \
+    $(TARGET_OUT_SHARED_LIBRARIES)/libpuresoftkeymasterdevice.so
+    
 TW_INTERNAL_STORAGE_PATH := /data/media
 TW_INTERNAL_STORAGE_MOUNT_POINT := data
 BOARD_HAS_LARGE_FILESYSTEM := true
