@@ -130,6 +130,7 @@ TARGET_USES_MKE2FS := true
 TW_BRIGHTNESS_PATH := "/sys/class/leds/lcd-backlight/brightness"
 TW_EXCLUDE_APEX := true
 TW_DEVICE_VERSION := OPPO-Realme-MTK6873-TWRP-A12
+TW_INCLUDE_LOGICAL := my_product my_engineering my_company my_carrier my_region my_heytap my_stock my_preload my_manifest my_bigball
 
 # resetprop and magiskboot
 TW_INCLUDE_RESETPROP := true
