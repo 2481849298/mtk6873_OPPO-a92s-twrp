@@ -16,6 +16,7 @@ on fs && property:ro.debuggable=0
     write /sys/class/oplus_chg/usb/otg_switch 1
 
 on post-fs
+    install_keyring
     wait /dev/block/mmcblk0boot0 2
     symlink /dev/block/sda /dev/block/mmcblk0boot0
     symlink /dev/block/sdb /dev/block/mmcblk0boot1
