@@ -7,7 +7,6 @@ on init
     setprop sys.usb.ffs.aio_compat 1
 
 on fs && property:ro.debuggable=0
-    install_keyring
     # distinguish USB shoulde connect or not, i.e. CDP vs SDP
     write /sys/class/udc/musb-hdrc/device/cmode 1
     # set charging free due to it wait for USB activation
@@ -43,13 +42,7 @@ on post-fs
     symlink /dev/block/mapper/pl_b /dev/block/platform/bootdevice/by-name/preloader_raw_b
 
 
-service keystore_auth /system/bin/keystore_auth
-    oneshot
-    user system
-    group root
-    disabled
-    seclabel u:r:recovery:s0
-
+mkdir /data/vendor/key_provisioning 0771 system system
 service keystore /system/bin/keystore /tmp/misc/keystore
     user root
     group root drmrpc readproc log
