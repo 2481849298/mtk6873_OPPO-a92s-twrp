@@ -78,11 +78,6 @@ BOARD_MAIN_PARTITION_LIST := system vendor odm product system_ext
 TARGET_COPY_OUT_VENDOR := vendor
 
 # Metadata
-BOARD_USES_METADATA_PARTITION := true
-TW_CRYPTO_FS_TYPE := f2fs
-TW_CRYPTO_REAL_BLKDEV := "/dev/block/by-name/userdata"
-TW_CRYPTO_MNT_POINT := "/data"
-TW_CRYPTO_FS_OPTIONS := "noatime,nosuid,nodev,noauto_da_alloc,discard,errors=panic"
 TARGET_SYSTEM_PROP := $(DEVICE_PATH)/system.prop
 BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4 erofs
 BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE := f2fs
