@@ -93,10 +93,6 @@ BOARD_VNDK_VERSION := current
     libion \
     libxml2
 
-TW_RECOVERY_ADDITIONAL_RELINK_FILES += \
-    $(TARGET_OUT_VENDOR_EXECUTABLES)/hw/android.hardware.keymaster@4.1-service \
-    $(TARGET_OUT_VENDOR_SHARED_LIBRARIES)/libkeymaster4_1device.so \
-    $(TARGET_OUT_SHARED_LIBRARIES)/libpuresoftkeymasterdevice.so
     
 BOARD_HAS_LARGE_FILESYSTEM := true
 TARGET_RECOVERY_PIXEL_FORMAT := RGBX_8888
@@ -124,7 +120,7 @@ TARGET_USES_MKE2FS := true
 TW_BRIGHTNESS_PATH := "/sys/class/leds/lcd-backlight/brightness"
 TW_EXCLUDE_APEX := true
 TW_DEVICE_VERSION := OPPO-Realme-MTK6873-TWRP-A12
-TW_INCLUDE_LOGICAL := my_product my_engineering my_company my_carrier my_region my_heytap my_stock my_preload my_manifest my_bigball
+TW_INCLUDE_LOGICAL := metadata my_version my_stock my_region my_product my_preload my_manifest my_heytap my_engineering my_company my_carrier my_bigball opporeserve usb_otg
 BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
 
 # resetprop and magiskboot
