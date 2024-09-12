@@ -58,32 +58,6 @@ service keymaster-4-1 /system/bin/android.hardware.keymaster@4.1-service.truston
     group root drmrpc
     disabled
     seclabel u:r:recovery:s0
-      
-on property:ro.crypto.state=encrypted
-    start keymaster-4-1
-    start gatekeeper-1-0
-
-
-on property:ro.crypto.state=unsupported
-    stop mobicore
-    stop servicemanager
-    stop hwservicemanager
-    stop keymaster-4-1
-    stop gatekeeper-1-0
-
-on property:ro.crypto.state=unencrypted
-    stop mobicore
-    stop servicemanager
-    stop hwservicemanager
-    stop keymaster-4-1
-    stop gatekeeper-1-0
-
-on property:twrp.decrypt.done=true && property:twrp.all.users.decrypted=true
-    stop mobicore
-    stop servicemanager
-    stop hwservicemanager
-    stop keymaster-4-1
-    stop gatekeeper-1-0
 
 service mobicore /vendor/bin/mcDriverDaemon --sfs-reformat --P1 /mnt/vendor/persist/mcRegistry \
 	-r /vendor/app/mcRegistry/06090000000000000000000000000000.drbin \
@@ -120,7 +94,30 @@ service mobicore /vendor/bin/mcDriverDaemon --sfs-reformat --P1 /mnt/vendor/pers
 	-r /odm/vendor/app/mcRegistry/6b3f5fa0f8cf55a7be2582587d62d63a.drbin \
         -r /odm/vendor/app/mcRegistry/09070000000000000000000000000000.drbin \
 	-r /vendor/app/mcRegistry/5020170115e016302017012521300000.drbin
-    user system
-    group system
-    class core
-    priority -20
+    seclabel u:r:recovery:s0
+          
+on property:ro.crypto.state=encrypted
+    start keymaster-4-1
+    start gatekeeper-1-0
+
+
+on property:ro.crypto.state=unsupported
+    stop mobicore
+    stop servicemanager
+    stop hwservicemanager
+    stop keymaster-4-1
+    stop gatekeeper-1-0
+
+on property:ro.crypto.state=unencrypted
+    stop mobicore
+    stop servicemanager
+    stop hwservicemanager
+    stop keymaster-4-1
+    stop gatekeeper-1-0
+
+on property:twrp.decrypt.done=true && property:twrp.all.users.decrypted=true
+    stop mobicore
+    stop servicemanager
+    stop hwservicemanager
+    stop keymaster-4-1
+    stop gatekeeper-1-0
