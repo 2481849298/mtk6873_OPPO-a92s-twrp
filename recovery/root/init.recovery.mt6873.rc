@@ -15,6 +15,23 @@ on fs && property:ro.debuggable=0
     write /sys/class/power_supply/usb/otg_switch 1
     write /sys/class/oplus_chg/usb/otg_switch 1
 
+    
+    mkdir /mnt/vendor/persist 0771 system system
+    
+    chown system system /mnt/vendor/persist
+    chmod 0771 /mnt/vendor/persist
+
+    # We restorecon /mnt/vendor/persist to set SEPolicy label.
+    restorecon /mnt/vendor/persist
+
+    # Mount the persist partition on /mnt/vendor/persist
+    mount ext4 /dev/block/by-name/persist /mnt/vendor/persist rw
+
+    # Create mcRegistry to store failure record
+    mkdir /mnt/vendor/persist/mcRegistry 0771 system system
+
+    start mobicore
+    
 on post-fs
     install_keyring
     wait /dev/block/mmcblk0boot0 2
@@ -46,18 +63,36 @@ on post-fs
 mkdir /data/vendor/key_provisioning 0771 system system
 
 
+service keystore_auth /system/bin/keystore_auth
+    oneshot
+    user system
+    group root
+    seclabel u:r:recovery:s0
 
-service gatekeeper-1-0 /system/bin/android.hardware.gatekeeper@1.0-service
+service gatekeeper-1-0 /system/bin/hw/android.hardware.gatekeeper@1.0-service
     user root
     group root
     disabled
     seclabel u:r:recovery:s0
-  
-service keymaster-4-1 /system/bin/android.hardware.keymaster@4.1-service.trustonic
+
+service cryptoeng_oplus /vendor/bin/hw/vendor.oplus.hardware.cryptoeng@1.0-service
+    user root
+    group root input sdcard_rw sdcard_r
+    disabled
+    seclabel u:r:recovery:s0
+
+service keymaster-4-1 /vendor/bin/hw/android.hardware.keymaster@4.1-service.trustonic
     user root
     group root drmrpc
     disabled
     seclabel u:r:recovery:s0
+
+on property:twrp.decrypt.done=true && property:twrp.all.users.decrypted=true
+    setprop crypto.ready 0
+    stop cryptoeng_oplus
+    stop mobicore
+    stop keymaster-4-1
+    stop gatekeeper-1-0
 
 service mobicore /vendor/bin/mcDriverDaemon --sfs-reformat --P1 /mnt/vendor/persist/mcRegistry \
 	-r /vendor/app/mcRegistry/06090000000000000000000000000000.drbin \
@@ -94,30 +129,37 @@ service mobicore /vendor/bin/mcDriverDaemon --sfs-reformat --P1 /mnt/vendor/pers
 	-r /odm/vendor/app/mcRegistry/6b3f5fa0f8cf55a7be2582587d62d63a.drbin \
         -r /odm/vendor/app/mcRegistry/09070000000000000000000000000000.drbin \
 	-r /vendor/app/mcRegistry/5020170115e016302017012521300000.drbin
+    user root
+    group root
+    disabled
     seclabel u:r:recovery:s0
-          
-on property:ro.crypto.state=encrypted
+
+on property:ro.crypto.state=encrypted && property:ro.crypto.type=file
+    setprop crypto.ready 1
+
+on property:hwservicemanager.ready=true && property:crypto.ready=1
+    start cryptoeng_oplus
     start keymaster-4-1
     start gatekeeper-1-0
 
-
 on property:ro.crypto.state=unsupported
+    setprop crypto.ready 0
+    stop cryptoeng_oplus
     stop mobicore
-    stop servicemanager
-    stop hwservicemanager
     stop keymaster-4-1
     stop gatekeeper-1-0
 
 on property:ro.crypto.state=unencrypted
+    setprop crypto.ready 0
+    stop cryptoeng_oplus
     stop mobicore
-    stop servicemanager
-    stop hwservicemanager
     stop keymaster-4-1
     stop gatekeeper-1-0
 
-on property:twrp.decrypt.done=true && property:twrp.all.users.decrypted=true
-    stop mobicore
-    stop servicemanager
-    stop hwservicemanager
-    stop keymaster-4-1
-    stop gatekeeper-1-0
+on post-fs-data
+    mkdir /data/vendor_de 0770 system system
+    mkdir /data/vendor_de/0 0770 system system
+    mkdir /data/vendor_de/0/cryptoeng 0770 system system
+
+on boot
+    start health-hal-2-1
