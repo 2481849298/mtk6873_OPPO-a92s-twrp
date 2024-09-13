@@ -114,7 +114,6 @@ TW_EXCLUDE_APEX := true
 TW_DEVICE_VERSION := OPPO-Realme-MTK6873-TWRP-A12
 TW_INCLUDE_LOGICAL := metadata my_version my_stock my_region my_product my_preload my_manifest my_heytap my_engineering my_company my_carrier my_bigball opporeserve usb_otg
 BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
-PRODUCT_ENFORCE_VINTF_MANIFEST := true
 
 # resetprop and magiskboot
 TW_INCLUDE_RESETPROP := true
