@@ -62,38 +62,6 @@ on post-fs
 
 mkdir /data/vendor/key_provisioning 0771 system system
 
-
-service keystore_auth /system/bin/keystore_auth
-    oneshot
-    user system
-    group root
-    seclabel u:r:recovery:s0
-
-service gatekeeper-1-0 /system/bin/hw/android.hardware.gatekeeper@1.0-service
-    user root
-    group root
-    disabled
-    seclabel u:r:recovery:s0
-
-service cryptoeng_oplus /vendor/bin/hw/vendor.oplus.hardware.cryptoeng@1.0-service
-    user root
-    group root input sdcard_rw sdcard_r
-    disabled
-    seclabel u:r:recovery:s0
-
-service keymaster-4-1 /vendor/bin/hw/android.hardware.keymaster@4.1-service.trustonic
-    user root
-    group root drmrpc
-    disabled
-    seclabel u:r:recovery:s0
-
-on property:twrp.decrypt.done=true && property:twrp.all.users.decrypted=true
-    setprop crypto.ready 0
-    stop cryptoeng_oplus
-    stop mobicore
-    stop keymaster-4-1
-    stop gatekeeper-1-0
-
 service mobicore /vendor/bin/mcDriverDaemon --sfs-reformat --P1 /mnt/vendor/persist/mcRegistry \
 	-r /vendor/app/mcRegistry/06090000000000000000000000000000.drbin \
 	-r /vendor/app/mcRegistry/020f0000000000000000000000000000.drbin \
@@ -133,6 +101,37 @@ service mobicore /vendor/bin/mcDriverDaemon --sfs-reformat --P1 /mnt/vendor/pers
     group root
     disabled
     seclabel u:r:recovery:s0
+    
+service keystore_auth /system/bin/keystore_auth
+    oneshot
+    user system
+    group root
+    seclabel u:r:recovery:s0
+
+service gatekeeper-1-0 /system/bin/hw/android.hardware.gatekeeper@1.0-service
+    user root
+    group root
+    disabled
+    seclabel u:r:recovery:s0
+
+service cryptoeng_oplus /vendor/bin/hw/vendor.oplus.hardware.cryptoeng@1.0-service
+    user root
+    group root input sdcard_rw sdcard_r
+    disabled
+    seclabel u:r:recovery:s0
+
+service keymaster-4-1 /vendor/bin/hw/android.hardware.keymaster@4.1-service.trustonic
+    user root
+    group root drmrpc
+    disabled
+    seclabel u:r:recovery:s0
+
+on property:twrp.decrypt.done=true && property:twrp.all.users.decrypted=true
+    setprop crypto.ready 0
+    stop cryptoeng_oplus
+    stop mobicore
+    stop keymaster-4-1
+    stop gatekeeper-1-0
 
 on property:ro.crypto.state=encrypted && property:ro.crypto.type=file
     setprop crypto.ready 1
