@@ -33,7 +33,7 @@
 		<string name="autostorage">儲存空間</string>
 
 		<!-- GUI XML strings -->
-		<string name="twrp_header">TWRP For Oneplus Ace 3 Pro</string>
+		<string name="twrp_header">OPPOa92s twrpt</string>
 		<string name="twrp_watch_header">TWRP %tw_version%</string>
 		<string name="cpu_temp">溫度: %tw_cpu_temp% &#xB0;C</string>
 		<string name="battery_pct">電量: %tw_battery%</string>
@@ -224,7 +224,7 @@
 		<string name="enc_disabled">已停用 - 設定密碼以啟用</string>
 		<string name="enc_enabled">已啟用</string>
 		<string name="enable_backup_comp_chk">啟用壓縮</string>
-		<string name="skip_digest_backup_chk" version="2">備份時跳過生成 Digest</string>
+		<string name="skip_digest_backup_chk" version="2">備份時跳過建立 Digest</string>
 		<string name="disable_backup_space_chk" version="2">在備份之前停用剩餘空間檢查</string>
 		<string name="current_boot_slot">當前槽位: %tw_active_slot%</string>
 		<string name="boot_slot_a">槽位 A</string>
@@ -397,6 +397,7 @@
 		<string name="language_hdr">語言</string>
 		<string name="terminal_btn">終端指令</string>
 		<string name="reload_theme_btn">重載主題</string>
+		<string name="dumlock_btn">HTC Dumlock</string>
 		<string name="inject_twrp_btn">注入 TWRP</string>
 		<string name="inject_twrp_confirm">是否重新注入 TWRP？</string>
 		<string name="injecting_twrp">正在重新注入 TWRP…</string>
@@ -416,6 +417,19 @@
 		<string name="partitioning_sd">正在對 SD 卡分割區…</string>
 		<string name="partitioning_sd2">這將需要幾分鐘的時間。</string>
 		<string name="part_sd_complete">分割區完成</string>
+		<string name="dumlock_hdr">HTC Dumlock</string>
+		<string name="dumlock_restore_btn">恢復原廠 Boot 映像</string>
+		<string name="dumlock_restore_confirm">是否恢復原廠 Boot 映像？</string>
+		<string name="dumlock_restoring">正在恢復原廠 Boot 映像…</string>
+		<string name="dumlock_restore_complete">恢復原廠 Boot 映像完成。</string>
+		<string name="dumlock_reflash_btn">重新刷入 Recovery</string>
+		<string name="dumlock_reflash_confirm">是否重新刷入 Recovery 至 Boot 分割區？</string>
+		<string name="dumlock_reflashing">正在刷入 Recovery 至 Boot 分割區…</string>
+		<string name="dumlock_reflash_complete">Recovery 刷入完成</string>
+		<string name="dumlock_install_btn">安裝 HTC Dumlock</string>
+		<string name="dumlock_install_confirm">是否安裝 HTC Dumlock 檔案到系統中？</string>
+		<string name="dumlock_installing">正在安裝 HTC Dumlock…</string>
+		<string name="dumlock_install_complete">HTC Dumlock 安裝完成</string>
 		<string name="swipe_to_unlock">滑動滑塊解鎖</string>
 		<string name="swipe_unlock">   解鎖</string>
 		<string name="fm_hdr">檔案管理</string>
@@ -520,14 +534,14 @@
 		<string name="mtp_crash">MTP 已崩潰。啟動時不再載入 MTP。</string>
 		<string name="decrypt_success">已使用預設密碼解密成功。</string>
 		<string name="unable_to_decrypt">無法使用預設密碼來解密，您可能需要格式化 Data 分割區。</string>
-		<string name="generating_digest1" version="2">正在生成 Digest</string>
+		<string name="generating_digest1" version="2">正在建立 Digest</string>
 		<!-- Message displayed during a backup if we are generating an Digest, ideally, leave the leading " * " to help align and separate this text from other console text -->
-		<string name="generating_digest2" version="2"> * 正在生成 Digest…</string>
-		<string name="digest_created" version="2"> * Digest 已生成。</string>
+		<string name="generating_digest2" version="2"> * 正在建立 Digest…</string>
+		<string name="digest_created" version="2"> * Digest 已建立。</string>
 		<string name="digest_error" version="2"> * Digest 錯誤！</string>
 		<string name="digest_compute_error" version="2"> * 計算 Digest 錯誤。</string>
 		<string name="current_date">（當前日期）</string>
-		<string name="auto_generate">（自動生成）</string>
+		<string name="auto_generate">（自動建立）</string>
 		<string name="unable_to_locate_partition">未找到“{1}”分割區。</string>
 		<string name="no_partition_selected">未選擇備份分割區。</string>
 		<string name="total_partitions_backup"> * 備份分割區總數: {1}</string>
@@ -656,7 +670,7 @@
 		<string name="installing_zip">正在安裝 Zip 刷機包“{1}”</string>
 		<string name="select_backup_opt">設定備份選項：</string>
 		<string name="compression_on">壓縮選項已開啟</string>
-		<string name="digest_off" version="2">Digest 生成已關閉</string>
+		<string name="digest_off" version="2">Digest 建立已關閉</string>
 		<string name="backup_fail">備份失敗</string>
 		<string name="backup_clean">備份失敗。正在清理備份檔案夾。</string>
 		<string name="running_recovery_commands">執行 Recovery 指令</string>
@@ -675,6 +689,9 @@
 		<string name="digest_match" version="2">Digest 校驗成功</string>
 		<string name="pid_signal">{1} 過程結束，標誌: {2}</string>
 		<string name="pid_error">{1} 過程結束，錯誤: {2}</string>
+		<string name="install_dumlock">安裝 HTC Dumlock 到系統…</string>
+		<string name="dumlock_restore">正在恢復原廠 Boot…</string>
+		<string name="dumlock_reflash">正在重新刷入 Recovery 到 Boot…</string>
 		<string name="run_script">正在執行 {1} 腳本…</string>
 		<string name="rename_stock">重新命名/system 下原廠 Recovery 的補丁，避免原廠韌體替換 TWRP。</string>
 		<string name="split_backup">拆分備份檔案為多個壓縮檔…</string>
@@ -733,7 +750,7 @@
 		<string name="rescue_party2"> 2. 格式化 Data 分割區；</string>
 		<string name="rescue_party3"> 3. 重新刷入您的 ROM。</string>
 		<string name="rescue_party4">報告的問題為：</string>
-		<string name="custom_install_confirm">是否安装 {1} ?</string>
+	    <string name="custom_install_confirm">是否安装 {1} ?</string>
 		<string name="custom_installing">正在安装 {1}...</string>
 		<string name="custom_installing_complete">{1} 安装完成！</string>
 		<string name="install_magisk">安裝 Magisk</string>

@@ -33,7 +33,7 @@
 		<string name="autostorage">存储</string>
 
 		<!-- GUI XML strings -->
-		<string name="twrp_header">TWRP For Oneplus Ace 3 Pro</string>
+		<string name="twrp_header">OPPO a92s twrp</string>
 		<string name="twrp_watch_header">TWRP %tw_version%</string>
 		<string name="cpu_temp">CPU温度: %tw_cpu_temp% &#xB0;C</string>
 		<string name="battery_pct">电量: %tw_battery%</string>
@@ -399,6 +399,7 @@
 		<string name="language_hdr">语言</string>
 		<string name="terminal_btn">终端命令</string>
 		<string name="reload_theme_btn">重载主题</string>
+		<string name="dumlock_btn">HTC Dumlock</string>
 		<string name="inject_twrp_btn">注入 TWRP</string>
 		<string name="inject_twrp_confirm">是否重新注入 TWRP？</string>
 		<string name="injecting_twrp">正在重新注入 TWRP…</string>
@@ -418,6 +419,19 @@
 		<string name="partitioning_sd">正在对 SD 卡分区…</string>
 		<string name="partitioning_sd2">这将需要几分钟的时间。</string>
 		<string name="part_sd_complete">分区完成</string>
+		<string name="dumlock_hdr">HTC Dumlock</string>
+		<string name="dumlock_restore_btn">恢复原版 Boot 镜像</string>
+		<string name="dumlock_restore_confirm">是否恢复原版 Boot 镜像？</string>
+		<string name="dumlock_restoring">正在恢复原版 Boot 镜像…</string>
+		<string name="dumlock_restore_complete">恢复原版 Boot 镜像完成</string>
+		<string name="dumlock_reflash_btn">重新刷入 Recovery</string>
+		<string name="dumlock_reflash_confirm">是否重新刷入 Recovery 至 Boot 分区？</string>
+		<string name="dumlock_reflashing">正在刷入 Recovery 至 Boot 分区…</string>
+		<string name="dumlock_reflash_complete">Recovery 刷入完成</string>
+		<string name="dumlock_install_btn">安装 HTC Dumlock</string>
+		<string name="dumlock_install_confirm">是否安装 HTC Dumlock 文件到系统中？</string>
+		<string name="dumlock_installing">正在安装 HTC Dumlock…</string>
+		<string name="dumlock_install_complete">HTC Dumlock 安装完成</string>
 		<string name="swipe_to_unlock">滑动滑块解锁</string>
 		<string name="swipe_unlock">   解锁</string>
 		<string name="fm_hdr">文件管理</string>
@@ -684,6 +698,9 @@
 		<string name="digest_match" version="2">Digest 校验成功</string>
 		<string name="pid_signal">{1} 过程结束，标志: {2}</string>
 		<string name="pid_error">{1} 过程结束，错误: {2}</string>
+		<string name="install_dumlock">安装 HTC Dumlock 到系统…</string>
+		<string name="dumlock_restore">正在恢复原版 Boot…</string>
+		<string name="dumlock_reflash">正在重新刷入 Recovery 到 Boot…</string>
 		<string name="run_script">正在运行 {1} 脚本…</string>
 		<string name="rename_stock">重命名/system 下原版 Recovery 的补丁文件，避免原厂固件替换 TWRP。</string>
 		<string name="split_backup">分解备份文件为多个压缩文件…</string>
@@ -770,17 +787,5 @@
 		<string name="restore_with_pattern1">ROM 中的 图案密码 已启用</string>
 		<string name="restore_with_pattern2">恢复前应该在 ROM 中禁用 图案密码</string>
 		<string name="reboot_after_restore">建议在 Android 首次启动后再重启一次。</string>
-		<string name="custom_install_confirm">是否安装 {1} ?</string>
-		<string name="custom_installing">正在安装 {1}...</string>
-		<string name="custom_installing_complete">{1} 安装完成！</string>
-		<string name="install_magisk">安装 Magisk</string>
-		<string name="install_boot_permissive">安装 内核宽容</string>
-		<string name="auto_disable_avb2">刷入 ROM 后自动禁用 AVB2.0</string>
-		<string name="disable_avb2">禁用 AVB2.0</string>
-		<string name="disable_avb2_confirm">是否禁用 AVB2.0？</string>
-		<string name="disabling_AVB2">正在禁用 AVB2.0...</string>
-		<string name="disabling_AVB2_complete">禁用 AVB2.0 完成！</string>
-		<string name="disable_avb2_success_msg">禁用AVB2.0：处理 '{1}' 成功。</string>
-		<string name="disable_avb2_fail_msg">禁用AVB2.0：处理 '{1}' 失败！</string>
 	</resources>
 </language>
