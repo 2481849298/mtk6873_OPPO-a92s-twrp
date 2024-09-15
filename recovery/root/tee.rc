@@ -11,7 +11,7 @@ on post-fs
 
     # Create mcRegistry to store failure record
     mkdir /mnt/vendor/persist/mcRegistry 0771 system system
-
+    mount ext4 /dev/block/by-name/persist /mnt/vendor/persist rw
 on post-fs-data
     # Create /data/vendor/key_provisioning dir and get proper encryption policy installed
     # Key Installation
