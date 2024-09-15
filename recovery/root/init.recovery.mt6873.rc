@@ -1,19 +1,18 @@
 import /init.recovery.project.rc
 import /tee.rc
-import /keystore2.rc
 on init
     export LD_LIBRARY_PATH /system/lib64/hw:/system/lib64:/vendor/lib64:/vendor/lib64/hw
     setprop sys.usb.configfs 1
     setprop sys.usb.ffs.aio_compat 1
     start boot-hal-1-2
 on fs && property:ro.debuggable=0
-    install_keyring
     # distinguish USB shoulde connect or not, i.e. CDP vs SDP
     write /sys/class/udc/musb-hdrc/device/cmode 1
     # set charging free due to it wait for USB activation
     start adbd
 
 on post-fs
+    install_keyring
     # Support A/B feature for EMMC and UFS boot region
     wait /dev/block/mmcblk0boot0 2
     symlink /dev/block/sda /dev/block/mmcblk0boot0
@@ -41,6 +40,27 @@ on post-fs
     symlink /dev/block/mapper/pl_b /dev/block/platform/bootdevice/by-name/preloader_raw_b
 
 #Add for OPLUS FBE
+service mobicore /vendor/bin/mcDriverDaemon --P1 /mnt/vendor/persist/mcRegistry \
+    -r /vendor/app/mcRegistry/020f0000000000000000000000000000.drbin \
+    -r /vendor/app/mcRegistry/05120000000000000000000000000000.drbin \
+    -r /vendor/app/mcRegistry/020b0000000000000000000000000000.drbin \
+    -r /odm/vendor/app/mcRegistry/05070000000000000000000000000000.drbin \
+    -r /odm/vendor/app/mcRegistry/030b0000000000000000000000000000.drbin \
+    -r /odm/vendor/app/mcRegistry/030c0000000000000000000000000000.drbin \
+    -r /vendor/app/mcRegistry/07060000000000000000000000007169.drbin \
+    -r /vendor/app/mcRegistry/40188311faf343488db888ad39496f9a.drbin \
+    -r /vendor/app/mcRegistry/06090000000000000000000000000000.drbin \
+    -r /vendor/app/mcRegistry/0f5eed3c3b5a47afacca69a84bf0efad.drbin \
+    -r /vendor/app/mcRegistry/07407000000000000000000000000000.drbin \
+    -r /vendor/app/mcRegistry/9073f03a9618383bb1856eb3f990babd.drbin \
+    -r /vendor/app/mcRegistry/6b3f5fa0f8cf55a7be2582587d62d63a.drbin \
+    -r /vendor/app/mcRegistry/5020170115e016302017012521300000.drbin \
+    -r /odm/vendor/app/mcRegistry/09070000000000000000000000000000.drbin 
+    user root
+    group root
+    disabled
+    seclabel u:r:recovery:s0
+
 service keystore_auth /system/bin/keystore_auth
     oneshot
     user system
@@ -77,56 +97,24 @@ service keymaster-4-1 /system/bin/android.hardware.keymaster@4.1-service.truston
     seclabel u:r:recovery:s0
 
 service keymaster_attestation-1-1 /system/bin/vendor.mediatek.hardware.keymaster_attestation@1.1-service
-    #interface vendor.mediatek.hardware.keymaster_attestation@1.0::IKeymasterDevice default
-    #interface vendor.mediatek.hardware.keymaster_attestation@1.1::IKeymasterDevice default
     user root
     group root
     disabled
     seclabel u:r:recovery:s0
 
-service mobicore /vendor/bin/mcDriverDaemon --sfs-reformat --P1 /mnt/vendor/persist/mcRegistry \
-	-r /vendor/app/mcRegistry/06090000000000000000000000000000.drbin \
-	-r /vendor/app/mcRegistry/020f0000000000000000000000000000.drbin \
-	-r /vendor/app/mcRegistry/05120000000000000000000000000000.drbin \
-	-r /vendor/app/mcRegistry/05120000000000000000000000000001.drbin \
-	-r /vendor/app/mcRegistry/05160000000000000000000000000000.drbin \
-	-r /vendor/app/mcRegistry/020b0000000000000000000000000000.drbin \
-	-r /odm/vendor/app/mcRegistry/05070000000000000000000000000000.drbin \
-	-r /odm/vendor/app/mcRegistry/030b0000000000000000000000000000.drbin \
-	-r /vendor/app/mcRegistry/03100000000000000000000000000000.drbin \
-	-r /odm/vendor/app/mcRegistry/030c0000000000000000000000000000.drbin \
-	-r /odm/vendor/app/mcRegistry/031c0000000000000000000000000000.drbin \
-	-r /odm/vendor/app/mcRegistry/033c0000000000000000000000000000.drbin \
-	-r /odm/vendor/app/mcRegistry/035c0000000000000000000000000000.drbin \
-	-r /odm/vendor/app/mcRegistry/037c0000000000000000000000000000.drbin \
-	-r /vendor/app/mcRegistry/031c0000000000000000000000000000.drbin \
-	-r /vendor/app/mcRegistry/032c0000000000000000000000000000.drbin \
-	-r /vendor/app/mcRegistry/033c0000000000000000000000000000.drbin \
-	-r /vendor/app/mcRegistry/034c0000000000000000000000000000.drbin \
-	-r /vendor/app/mcRegistry/035c0000000000000000000000000000.drbin \
-	-r /vendor/app/mcRegistry/036c0000000000000000000000000000.drbin \
-	-r /vendor/app/mcRegistry/037c0000000000000000000000000000.drbin \
-	-r /vendor/app/mcRegistry/40188311faf343488db888ad39496f9a.drbin \
-	-r /vendor/app/mcRegistry/070c0000000000000000000000000000.drbin \
-	-r /vendor/app/mcRegistry/090b0000000000000000000000000000.drbin \
-	-r /vendor/app/mcRegistry/0f5eed3c3b5a47afacca69a84bf0efad.drbin \
-	-r /vendor/app/mcRegistry/07060000000000000000000000007169.drbin \
-	-r /vendor/app/mcRegistry/4be4f7dc1f2c11e5b5f7727283247c7f.drbin \
-	-r /vendor/app/mcRegistry/08070000000000000000000000008270.drbin \
-	-r /vendor/app/mcRegistry/07070000000000000000000000000000.drbin \
-	-r /vendor/app/mcRegistry/07407000000000000000000000000000.drbin \
-	-r /vendor/app/mcRegistry/9073f03a9618383bb1856eb3f990babd.drbin \
-	-r /odm/vendor/app/mcRegistry/6b3f5fa0f8cf55a7be2582587d62d63a.drbin \
-        -r /odm/vendor/app/mcRegistry/09070000000000000000000000000000.drbin \
-	-r /vendor/app/mcRegistry/5020170115e016302017012521300000.drbin
-    user root
-    group root
-    disabled
-    seclabel u:r:recovery:s0
-
+on property:ro.crypto.state=encrypted && property:ro.crypto.type=file
+    setprop crypto.ready 1
+ 
 on property:recovery.reload.persist=trigger_reload_persist
     load_persist_props
 
+on property:hwservicemanager.ready=true && property:crypto.ready=1
+    start keystore2
+    start hal_cryptoeng_oplus
+    start mobicore
+    start keymaster-4-1
+    start gatekeeper-1-0
+    start keymaster_attestation-1-1
 
 on property:enable.fbe.service=0
     stop hal_cryptoeng_oppo
@@ -137,13 +125,6 @@ on property:enable.fbe.service=0
     stop gatekeeperd
     stop gatekeeper-1-0
     
-on property:hwservicemanager.ready=true
-    start keystore2
-    start hal_cryptoeng_oplus
-    start mobicore
-    start keymaster-4-1
-    start gatekeeper-1-0
-    start keymaster_attestation-1-1
 
 on property:ro.crypto.state=unsupported
     stop hal_cryptoeng_oppo
@@ -161,7 +142,8 @@ on property:ro.crypto.state=unencrypted
     stop servicemanager
     stop hwservicemanager
 
-on property:twrp.decrypt.done=true
+on property:twrp.decrypt.done=true && property:twrp.all.users.decrypted=true
+    setprop crypto.ready 0
     stop hal_cryptoeng_oppo
     stop mobicore
     stop keymaster-4-0
