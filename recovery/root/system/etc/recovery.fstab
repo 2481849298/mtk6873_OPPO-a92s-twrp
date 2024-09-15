@@ -84,4 +84,3 @@ my_preload.x /my_preload ext4 ro wait,logical,first_stage_mount,nofail
 /dev/block/by-name/dtbo /dtbo emmc defaults defaults
 /dev/block/by-name/otp /otp emmc defaults defaults
 /dev/block/by-name/vbmeta /vbmeta emmc defaults defaults
-/dev/block/by-name/persist /mnt/vendor/persist ext4 noatime,nosuid,nodev,noauto_da_alloc,commit=1,nodelalloc wait,check,formattable
