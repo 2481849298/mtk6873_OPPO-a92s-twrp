@@ -1,18 +1,55 @@
 import /init.recovery.project.rc
-import /tee.rc
 on init
     export LD_LIBRARY_PATH /system/lib64/hw:/system/lib64:/vendor/lib64:/vendor/lib64/hw
+    symlink /vendor/lib64/hw/libMcGatekeeper.so   /vendor/lib64/hw/gatekeeper.${ro.product.board}.so
     setprop sys.usb.configfs 1
     setprop sys.usb.ffs.aio_compat 1
     start boot-hal-1-2
+    mkdir /mnt/vendor/persist 0771 system system
 on fs && property:ro.debuggable=0
     # distinguish USB shoulde connect or not, i.e. CDP vs SDP
     write /sys/class/udc/musb-hdrc/device/cmode 1
     # set charging free due to it wait for USB activation
     start adbd
+    #create mountpoint for /mnt/vendor/persist partition
+    
+on post-fs-data
+    mkdir /data/vendor_de 0770 system system
+    mkdir /data/vendor_de/0 0770 system system
+    mkdir /data/vendor_de/0/cryptoeng 0770 system system
+    # Create /data/vendor/key_provisioning dir and get proper encryption policy installed
+    # Key Installation
+    mkdir /data/vendor/key_provisioning 0771 system system
+
+# For META/FACTORY mode
+on property:ro.crypto.state=unencrypted
+    write /proc/bootprof "MOBICORE: create /data/vendor/mcRegistry ++ (unencrypted)"
+    mkdir /data/vendor/mcRegistry 0775 system system
+    write /proc/bootprof "MOBICORE: create /data/vendor/mcRegistry -- (unencrypted)"
+
+# Normal mode, FBE
+on property:ro.crypto.type=file && property:ro.crypto.state=encrypted
+    write /proc/bootprof "MOBICORE: create /data/vendor/mcRegistry ++ (FBE encrypted)"
+    mkdir /data/vendor/mcRegistry 0775 system system
+    write /proc/bootprof "MOBICORE: create /data/vendor/mcRegistry -- (FBE encrypted)"
+
+# Normal mode, FDE
+on property:vold.decrypt=trigger_restart_framework
+    write /proc/bootprof "MOBICORE: create /data/vendor/mcRegistry ++ (FDE encrypted)"
+    mkdir /data/vendor/mcRegistry 0775 system system
+    write /proc/bootprof "MOBICORE: create /data/vendor/mcRegistry -- (FDE encrypted)"
 
 on post-fs
     install_keyring
+    chown system system /mnt/vendor/persist
+    chmod 0771 /mnt/vendor/persist
+
+    # We restorecon /mnt/vendor/persist to set SEPolicy label.
+    restorecon /mnt/vendor/persist
+
+    # Create mcRegistry to store failure record
+    mkdir /mnt/vendor/persist/mcRegistry 0771 system system
+    mount ext4 /dev/block/by-name/persist /mnt/vendor/persist rw
     # Support A/B feature for EMMC and UFS boot region
     wait /dev/block/mmcblk0boot0 2
     symlink /dev/block/sda /dev/block/mmcblk0boot0
@@ -40,26 +77,6 @@ on post-fs
     symlink /dev/block/mapper/pl_b /dev/block/platform/bootdevice/by-name/preloader_raw_b
 
 #Add for OPLUS FBE
-service mobicore /vendor/bin/mcDriverDaemon --P1 /mnt/vendor/persist/mcRegistry \
-    -r /vendor/app/mcRegistry/020f0000000000000000000000000000.drbin \
-    -r /vendor/app/mcRegistry/05120000000000000000000000000000.drbin \
-    -r /vendor/app/mcRegistry/020b0000000000000000000000000000.drbin \
-    -r /odm/vendor/app/mcRegistry/05070000000000000000000000000000.drbin \
-    -r /odm/vendor/app/mcRegistry/030b0000000000000000000000000000.drbin \
-    -r /odm/vendor/app/mcRegistry/030c0000000000000000000000000000.drbin \
-    -r /vendor/app/mcRegistry/07060000000000000000000000007169.drbin \
-    -r /vendor/app/mcRegistry/40188311faf343488db888ad39496f9a.drbin \
-    -r /vendor/app/mcRegistry/06090000000000000000000000000000.drbin \
-    -r /vendor/app/mcRegistry/0f5eed3c3b5a47afacca69a84bf0efad.drbin \
-    -r /vendor/app/mcRegistry/07407000000000000000000000000000.drbin \
-    -r /vendor/app/mcRegistry/9073f03a9618383bb1856eb3f990babd.drbin \
-    -r /vendor/app/mcRegistry/6b3f5fa0f8cf55a7be2582587d62d63a.drbin \
-    -r /vendor/app/mcRegistry/5020170115e016302017012521300000.drbin \
-    -r /odm/vendor/app/mcRegistry/09070000000000000000000000000000.drbin 
-    user root
-    group root
-    disabled
-    seclabel u:r:recovery:s0
 
 service keystore_auth /system/bin/keystore_auth
     oneshot
@@ -102,11 +119,30 @@ service keymaster_attestation-1-1 /system/bin/vendor.mediatek.hardware.keymaster
     disabled
     seclabel u:r:recovery:s0
 
+service mobicore /vendor/bin/mcDriverDaemon --P1 /mnt/vendor/persist/mcRegistry \
+    -r /vendor/app/mcRegistry/020f0000000000000000000000000000.drbin \
+    -r /vendor/app/mcRegistry/05120000000000000000000000000000.drbin \
+    -r /vendor/app/mcRegistry/020b0000000000000000000000000000.drbin \
+    -r /odm/vendor/app/mcRegistry/05070000000000000000000000000000.drbin \
+    -r /odm/vendor/app/mcRegistry/030b0000000000000000000000000000.drbin \
+    -r /odm/vendor/app/mcRegistry/030c0000000000000000000000000000.drbin \
+    -r /vendor/app/mcRegistry/07060000000000000000000000007169.drbin \
+    -r /vendor/app/mcRegistry/40188311faf343488db888ad39496f9a.drbin \
+    -r /vendor/app/mcRegistry/06090000000000000000000000000000.drbin \
+    -r /vendor/app/mcRegistry/0f5eed3c3b5a47afacca69a84bf0efad.drbin \
+    -r /vendor/app/mcRegistry/07407000000000000000000000000000.drbin \
+    -r /vendor/app/mcRegistry/9073f03a9618383bb1856eb3f990babd.drbin \
+    -r /vendor/app/mcRegistry/6b3f5fa0f8cf55a7be2582587d62d63a.drbin \
+    -r /vendor/app/mcRegistry/5020170115e016302017012521300000.drbin \
+    -r /odm/vendor/app/mcRegistry/09070000000000000000000000000000.drbin 
+    user root
+    group root
+    disabled
+    seclabel u:r:recovery:s0
+
 on property:ro.crypto.state=encrypted && property:ro.crypto.type=file
     setprop crypto.ready 1
  
-on property:recovery.reload.persist=trigger_reload_persist
-    load_persist_props
 
 on property:hwservicemanager.ready=true && property:crypto.ready=1
     start keystore2
@@ -115,6 +151,7 @@ on property:hwservicemanager.ready=true && property:crypto.ready=1
     start keymaster-4-1
     start gatekeeper-1-0
     start keymaster_attestation-1-1
+
 
 on property:enable.fbe.service=0
     stop hal_cryptoeng_oppo
@@ -150,11 +187,6 @@ on property:twrp.decrypt.done=true && property:twrp.all.users.decrypted=true
     stop gatekeeper-1-0
     stop servicemanager
     stop hwservicemanager
-
-on post-fs-data
-    mkdir /data/vendor_de 0770 system system
-    mkdir /data/vendor_de/0 0770 system system
-    mkdir /data/vendor_de/0/cryptoeng 0770 system system
 
 on boot
     start health-hal-2-1
