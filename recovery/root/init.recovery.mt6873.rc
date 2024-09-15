@@ -87,7 +87,7 @@ on property:enable.fbe.service=0
     stop mobicore
     stop servicemanager
     stop hwservicemanager
-    stop keymaster-4-1
+    stop keymaster-4-0
     stop gatekeeperd
     stop vendor.gatekeeper-1-0
     
