@@ -52,6 +52,16 @@ on property:hwservicemanager.ready=true
     start gatekeeper-1-0
     start keymaster_attestation-1-1
 
+on property:enable.fbe.service=0
+    stop hal_cryptoeng_oppo
+    stop mobicore
+    stop servicemanager
+    stop hwservicemanager
+    stop keymaster-4-0
+    stop gatekeeperd
+    stop vendor.gatekeeper-1-0
+    
+
 on property:ro.crypto.state=unsupported
     stop hal_cryptoeng_oppo
     stop mobicore
