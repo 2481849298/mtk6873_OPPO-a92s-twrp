@@ -69,13 +69,12 @@ BOARD_KERNEL_SECOND_OFFSET := 0xbff88000
 BOARD_DTB_OFFSET := 0x0bc08000
 BOARD_KERNEL_IMAGE_NAME := kernel
 BOARD_INCLUDE_RECOVERY_DTBO := true
-BOARD_INCLUDE_DTB_IN_BOOTIMG := true
 
 BOARD_KERNEL_CMDLINE := bootopt=64S3,32N2,64N2 buildvariant=user
 BOARD_KERNEL_CMDLINE += androidboot.init_fatal_reboot_target=recovery  # TODO: Used in other device tree. Do we need it?
 
 TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/kernel
-BOARD_PREBUILT_DTBOIMAGE := $(DEVICE_PATH)/prebuilt/dtbo
+BOARD_PREBUILT_DTBOIMAGE := $(DEVICE_PATH)/prebuilt/dtbo.img
 TARGET_PREBUILT_DTB := $(DEVICE_PATH)/prebuilt/dtb
 
 # Args
