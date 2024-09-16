@@ -7,7 +7,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/gsi_keys.mk)
 $(call inherit-product, vendor/twrp/config/common.mk)
 
 PRODUCT_COPY_FILES += $(LOCAL_PATH)/prebuilt/dtb:dtb.img
-	
+$(call inherit-product, device/oplus/OP4ABB/device.mk)	
 ## Device identifier. This must come after all inclusions
 PRODUCT_DEVICE := OP4ABB
 PRODUCT_NAME := twrp_OP4ABB
