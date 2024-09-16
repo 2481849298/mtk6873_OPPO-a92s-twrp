@@ -1,8 +1,8 @@
 import /tee.rc
-
+import /trustonic.rc
 on init
     export LD_LIBRARY_PATH /system/lib64:/vendor/lib64:/vendor/lib64/hw
-
+    chmod 0777 /system/bin/modelchange.sh
     # Create a more standard /dev/block layout for our scripts
     symlink /dev/block/platform/bootdevice /dev/block/bootdevice
 
@@ -46,27 +46,6 @@ service set_permissive /system/bin/set_permissive.sh
     oneshot
     seclabel u:r:recovery:s0
 
-service mobicore /vendor/bin/mcDriverDaemon --P1 /mnt/vendor/persist/mcRegistry \
-    -r /vendor/app/mcRegistry/020f0000000000000000000000000000.drbin \
-    -r /vendor/app/mcRegistry/05120000000000000000000000000000.drbin \
-    -r /vendor/app/mcRegistry/020b0000000000000000000000000000.drbin \
-    -r /odm/vendor/app/mcRegistry/05070000000000000000000000000000.drbin \
-    -r /odm/vendor/app/mcRegistry/030b0000000000000000000000000000.drbin \
-    -r /odm/vendor/app/mcRegistry/030c0000000000000000000000000000.drbin \
-    -r /vendor/app/mcRegistry/07060000000000000000000000007169.drbin \
-    -r /vendor/app/mcRegistry/40188311faf343488db888ad39496f9a.drbin \
-    -r /vendor/app/mcRegistry/06090000000000000000000000000000.drbin \
-    -r /vendor/app/mcRegistry/0f5eed3c3b5a47afacca69a84bf0efad.drbin \
-    -r /vendor/app/mcRegistry/07407000000000000000000000000000.drbin \
-    -r /vendor/app/mcRegistry/9073f03a9618383bb1856eb3f990babd.drbin \
-    -r /vendor/app/mcRegistry/6b3f5fa0f8cf55a7be2582587d62d63a.drbin \
-    -r /vendor/app/mcRegistry/5020170115e016302017012521300000.drbin \
-    -r /odm/vendor/app/mcRegistry/09070000000000000000000000000000.drbin
-    user root
-    group root
-    disabled
-    seclabel u:r:recovery:s0
-   
 
 service hal_cryptoeng_oplus /system/bin/vendor.oplus.hardware.cryptoeng@1.0-service
     user root
@@ -99,7 +78,6 @@ service keymaster_attestation-1-1 /system/bin/vendor.mediatek.hardware.keymaster
     
 
 on property:hwservicemanager.ready=true
-    start keystore2
     start hal_cryptoeng_oplus
     start mobicore
     start keymaster-4-1
