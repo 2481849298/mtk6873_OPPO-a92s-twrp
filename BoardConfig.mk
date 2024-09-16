@@ -175,5 +175,6 @@ PLATFORM_VERSION_LAST_STABLE := $(PLATFORM_VERSION)
 
 # TWRP Configuration
 include $(DEVICE_PATH)/configs/device-Config.mk
+TW_DEFAULT_LANGUAGE =zh_CN
 
 

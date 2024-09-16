@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FDEVICE="MTK6853"
+FDEVICE="OP4ABB"
 #set -o xtrace
 
 fox_get_target_device() {
