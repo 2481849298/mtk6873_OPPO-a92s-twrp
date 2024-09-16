@@ -39,6 +39,10 @@ service mobicore /system/bin/mcDriverDaemon --P1 /mnt/vendor/persist/mcRegistry 
     disabled
     seclabel u:r:recovery:s0
 
+
+
+on post-fs
+    start mobicore
 # t-Drv naming
 # 020f0000000000000000000000000000.drbin : utils
 # 05120000000000000000000000000000.drbin : sec

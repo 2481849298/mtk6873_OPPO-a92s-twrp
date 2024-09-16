@@ -6,9 +6,6 @@ on init
     # Create a more standard /dev/block layout for our scripts
     symlink /dev/block/platform/bootdevice /dev/block/bootdevice
 
-    start boot-hal-1-2
-    start set_permissive
-    start modelchange
 on fs
     install_keyring
 
@@ -46,6 +43,26 @@ service set_permissive /system/bin/set_permissive.sh
     oneshot
     seclabel u:r:recovery:s0
 
+    
+
+on property:hwservicemanager.ready=true
+    start hal_cryptoeng_oplus
+    start keymaster-4-1
+    start gatekeeperd
+    start gatekeeper-1-0
+    start keymaster_attestation-1-1
+
+on property:ro.crypto.state=unsupported
+    stop hal_cryptoeng_oppo
+    stop mobicore
+    stop keymaster-4-1
+    stop gatekeeper-1-0
+
+on property:ro.crypto.state=unencrypted
+    stop hal_cryptoeng_oppo
+    stop mobicore
+    stop keymaster-4-1
+    stop gatekeeper-1-0
 
 service hal_cryptoeng_oplus /system/bin/vendor.oplus.hardware.cryptoeng@1.0-service
     user root
@@ -77,38 +94,17 @@ service keymaster_attestation-1-1 /system/bin/vendor.mediatek.hardware.keymaster
     seclabel u:r:recovery:s0    
     
 
-on property:hwservicemanager.ready=true
-    start hal_cryptoeng_oplus
-    start mobicore
-    start keymaster-4-1
-    start gatekeeper-1-0
-    start keymaster_attestation-1-1
-
-on property:ro.crypto.state=unsupported
-    stop hal_cryptoeng_oppo
-    stop mobicore
-    stop keymaster-4-1
-    stop gatekeeper-1-0
-    stop servicemanager
-    stop hwservicemanager
-
-on property:ro.crypto.state=unencrypted
-    stop hal_cryptoeng_oppo
-    stop mobicore
-    stop keymaster-4-1
-    stop gatekeeper-1-0
-    stop servicemanager
-    stop hwservicemanager
-
 on property:twrp.decrypt.done=true
     stop hal_cryptoeng_oppo
     stop mobicore
     stop keymaster-4-1
     stop gatekeeper-1-0
-    stop servicemanager
-    stop hwservicemanager
 
-   
+    start boot-hal-1-2
+    start set_permissive
+    start modelchange
+    
+
 on post-fs-data
     mkdir /data/vendor_de 0770 system system
     mkdir /data/vendor_de/0 0770 system system
