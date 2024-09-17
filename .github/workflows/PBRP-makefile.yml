@@ -174,7 +174,7 @@ jobs:
           android-recovery/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/ramdisk*.img
           android-recovery/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/*.gz
           android-recovery/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/*.lz4
-        name: PBRP }} // ${{ env.BUILD_DATE }}
+        name: PBRP ${{ env.BUILD_DATE }}
         tag_name: ${{ github.run_id }}
         body: |
           Build: ${{ github.event.inputs.MANIFEST_BRANCH }}
