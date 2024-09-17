@@ -17,7 +17,7 @@
 First checkout minimal twrp with omnirom tree:
 
 ```
-repo init --depth=1 -u git://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-11
+repo init --depth=1 -u git://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git -b twrp-12.1
 
 repo sync -j64
 |
