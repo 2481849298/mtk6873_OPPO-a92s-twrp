@@ -1,5 +1,5 @@
 # android_device_mtk6873
-构建适用 OPPO-Realme  A92S处理器通用TWRP
+构建适用 OPPO-Realme  A92STWRP
 
 ## 特征
 
