@@ -38,7 +38,6 @@ my_preload.x /my_preload ext4 ro wait,logical,first_stage_mount,nofail
 /dev/block/by-name/protect2 /mnt/vendor/protect_s ext4 noatime,nosuid,nodev,noauto_da_alloc,commit=1,nodelalloc wait,check,formattable
 /dev/block/by-name/nvdata /mnt/vendor/nvdata ext4 noatime,nosuid,nodev,noauto_da_alloc,commit=1,nodelalloc wait,check,formattable
 /dev/block/by-name/nvcfg /mnt/vendor/nvcfg ext4 noatime,nosuid,nodev,noauto_da_alloc,commit=1,nodelalloc wait,check,formattable
-/dev/block/sdd1 /usb_otg vfat nosuid,nodev defaults
 /dev/block/by-name/cdt_engineering /cdt_engineering emmc defaults defaults
 /dev/block/by-name/oplusreserve2 /mnt/vendor/oplusreserve ext4 noatime,nosuid,nodev,noauto_da_alloc,commit=1,nodelalloc wait,check,formattable
 /devices/platform/externdevice* auto auto defaults voldmanaged=sdcard1:auto

@@ -8,7 +8,7 @@
 - adb
 - mtp
 - fastbootd
-- 部分 /data 解密
+- data 解密
 - 亮度
 - 触摸
 
