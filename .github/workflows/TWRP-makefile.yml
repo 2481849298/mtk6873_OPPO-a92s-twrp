@@ -5,7 +5,7 @@ on:
     inputs:
       MANIFEST_URL:
         description: 'MANIFEST_URL (if want to use SSH keys, use git@github.com:XXXXX)'
-        required: false
+        required: true
         default: 'https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp'
       MANIFEST_BRANCH:
         description: 'MANIFEST_BRANCH'
@@ -13,35 +13,35 @@ on:
         default: 'twrp-12.1'
       DEVICE_TREE_URL:
         description: 'DEVICE_TREE_URL'
-        required: false
+        required: true
         default: 'https://github.com/2481849298/mtk6873_OPPO-a92s-twrp'
       DEVICE_TREE_BRANCH:
         description: 'DEVICE_TREE_BRANCH'
-        required: false
+        required: true
         default: 'android12'
       DEVICE_PATH:
         description: 'DEVICE_PATH'
-        required: false
+        required: true
         default: 'device/oplus/OP4ABB'
       DEVICE_NAME:
         description: 'DEVICE_NAME'
-        required: false
+        required: true
         default: 'OP4ABB'
       MAKEFILE_NAME:
         description: 'MAKEFILE_NAME'
-        required: false
+        required: true
         default: 'twrp_OP4ABB'
       BUILD_TARGET:
         description: 'BUILD_TARGET'
-        required: false
+        required: true
         default: 'recovery'
       RECOVERY_SOURCE_URL:
         description: 'RECOVERY_SOURCE_URL'
-        required: false
+        required: true
         default: 'https://github.com/2481849298/twrp_recovery'
       RECOVERY_PATH:
         description: 'RECOVERY_PATH'
-        required: false
+        required: true
         default: 'bootable/recovery'
               
 jobs:
