@@ -37,6 +37,7 @@ TARGET_2ND_CPU_VARIANT_RUNTIME := cortex-a55
 # Bootloader
 TARGET_BOOTLOADER_BOARD_NAME := k6873v1_64
 TARGET_NO_BOOTLOADER := true
+TARGET_USES_UEFI := true
 
 # Platform
 TARGET_BOARD_PLATFORM := mt6873
@@ -118,8 +119,8 @@ TW_INCLUDE_NTFS_3G := true
 TW_NO_SCREEN_BLANK := true
 TW_SCREEN_BLANK_ON_BOOT := true
 TARGET_USES_MKE2FS := true
-TW_MAX_BRIGHTNESS := 4095
-TW_DEFAULT_BRIGHTNESS := 2048
+TW_MAX_BRIGHTNESS := 2047
+TW_DEFAULT_BRIGHTNESS := 500
 TW_Y_OFFSET := 115
 TW_H_OFFSET := -115
 TW_NO_SCREEN_BLANK := true
@@ -128,7 +129,7 @@ TARGET_USES_MKE2FS := true
 TW_BRIGHTNESS_PATH := "/sys/class/leds/lcd-backlight/brightness"
 TW_EXCLUDE_APEX := true
 TW_DEVICE_VERSION := kuan-wanjixiaobai777
-TW_INCLUDE_LOGICAL := metadata my_version my_stock my_region my_product my_preload my_manifest my_heytap my_engineering my_company my_carrier my_bigball opporeserve usb_otg
+TW_INCLUDE_LOGICAL := metadata my_product my_engineering my_company my_carrier my_region my_heytap my_stock my_preload my_manifest opporeserve usb_otg
 BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
 TW_PREPARE_DATA_MEDIA_EARLY := true
 TW_CUSTOM_CPU_TEMP_PATH := /sys/class/power_supply/battery/temp
@@ -170,8 +171,11 @@ TARGET_BOARD_SUFFIX := _64
 TARGET_USES_64_BIT_BINDER := true
 
 
-#version
+# Hack: prevent anti rollback
+PLATFORM_SECURITY_PATCH := 2099-12-31
 PLATFORM_VERSION := 12
+VENDOR_SECURITY_PATCH := $(PLATFORM_SECURITY_PATCH)
+PLATFORM_VERSION_LAST_STABLE := $(PLATFORM_VERSION)
 PLATFORM_VERSION_LAST_STABLE := $(PLATFORM_VERSION)
 
 
@@ -194,3 +198,11 @@ BOARD_AVB_RECOVERY_ALGORITHM := SHA256_RSA2048
 BOARD_AVB_RECOVERY_ROLLBACK_INDEX := $(PLATFORM_SECURITY_PATCH_TIMESTAMP)
 BOARD_AVB_RECOVERY_ROLLBACK_INDEX_LOCATION := 3
 BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 3
+
+# System as root
+BOARD_SUPPRESS_SECURE_ERASE := true
+BOARD_BUILD_SYSTEM_ROOT_IMAGE := false
+TW_OVERRIDE_SYSTEM_PROPS := "ro.build.version.sdk"
+
+TW_EXCLUDE_TWRP_APP := true
+TW_BACKUP_EXCLUSIONS := /data/fonts/,/data/nandswap

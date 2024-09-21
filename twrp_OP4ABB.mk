@@ -27,3 +27,7 @@ PRODUCT_MANUFACTURER := OPPO
 
 
 
+PRODUCT_RELEASE_NAME := OP4ABB
+
+# Inherit from PBRP-common stuff, if building PBRP.
+$(call inherit-product-if-exists, vendor/pb/config/common.mk)

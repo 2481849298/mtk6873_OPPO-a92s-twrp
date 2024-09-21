@@ -14,7 +14,6 @@ on fs
 
 on post-fs
 
-
 service keystore_auth /system/bin/keystore_auth
     oneshot
     user system
