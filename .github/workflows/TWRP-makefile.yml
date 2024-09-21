@@ -5,7 +5,7 @@ on:
     inputs:
       MANIFEST_URL:
         description: 'MANIFEST_URL (if want to use SSH keys, use git@github.com:XXXXX)'
-        required: true
+        required: false
         default: 'https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp'
       MANIFEST_BRANCH:
         description: 'MANIFEST_BRANCH'
@@ -13,15 +13,15 @@ on:
         default: 'twrp-12.1'
       DEVICE_TREE_URL:
         description: 'DEVICE_TREE_URL'
-        required: true
+        required: false
         default: 'https://github.com/2481849298/mtk6873_OPPO-a92s-twrp'
       DEVICE_TREE_BRANCH:
         description: 'DEVICE_TREE_BRANCH'
-        required: true
+        required: false
         default: 'android12'
       DEVICE_PATH:
         description: 'DEVICE_PATH'
-        required: true
+        required: false
         default: 'device/oplus/OP4ABB'
       COMMON_TREE_URL:
         description: 'COMMON_TREE_URL (if no common tree, leave blank)'
@@ -31,17 +31,25 @@ on:
         required: false
       DEVICE_NAME:
         description: 'DEVICE_NAME'
-        required: true
+        required: false
         default: 'OP4ABB'
       MAKEFILE_NAME:
         description: 'MAKEFILE_NAME'
-        required: true
+        required: false
         default: 'twrp_OP4ABB'
       BUILD_TARGET:
         description: 'BUILD_TARGET'
-        required: true
+        required: false
         default: 'recovery'
-
+      RECOVERY_SOURCE_URL:
+        description: 'RECOVERY_SOURCE_URL'
+        required: false
+        default: 'https://github.com/2481849298/twrp_recovery'
+      RECOVERY_PATH:
+        description: 'RECOVERY_PATH'
+        required: false
+        default: 'bootable/recovery'
+              
 jobs:
   build:
     if: github.event.repository.owner.id == github.event.sender.id
@@ -110,9 +118,18 @@ jobs:
       run: |
         repo sync -j$(nproc --all) --force-sync
       working-directory: workspace
-      
+
+    - name: rm recovery
+      run: |
+        rm -rf ./${{ github.event.inputs.RECOVERY_PATH }}
+        
+    - name: Clone recovery
+      run: |
+        git clone ${{ github.event.inputs.RECOVERY_SOURCE_URL }} ./${{ github.event.inputs.RECOVERY_PATH }}
+         
     - name: Clone device tree
       run: |
+        git clone
         git clone ${{ github.event.inputs.DEVICE_TREE_URL }} -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} ./${{ github.event.inputs.DEVICE_PATH }}
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
 
@@ -156,8 +173,6 @@ jobs:
       with:
         files: | 
           workspace/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/${{ github.event.inputs.BUILD_TARGET }}.img
-          workspace/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/*.zip
-          workspace/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/*vendor*.img
         name: twrp ${{ env.BUILD_DATE }}
         tag_name: ${{ github.run_id }}
         body: |
