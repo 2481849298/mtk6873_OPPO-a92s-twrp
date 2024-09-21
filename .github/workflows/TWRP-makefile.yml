@@ -115,16 +115,16 @@ jobs:
 
     - name: rm recovery
       run: |
+        cd workspace
         rm -rf ./${{ github.event.inputs.RECOVERY_PATH }}
         
     - name: Clone recovery
       run: |
+        cd workspace
         git clone ${{ github.event.inputs.RECOVERY_SOURCE_URL }} ./${{ github.event.inputs.RECOVERY_PATH }}
-      working-directory: ${{ steps.pwd.outputs.workspace-folder }}
-
+ 
     - name: Clone device tree
       run: |
-        git clone
         git clone ${{ github.event.inputs.DEVICE_TREE_URL }} -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} ./${{ github.event.inputs.DEVICE_PATH }}
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
 
