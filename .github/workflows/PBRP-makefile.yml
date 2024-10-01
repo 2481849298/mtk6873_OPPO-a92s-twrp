@@ -165,7 +165,7 @@ jobs:
         files: |
           android-recovery/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/${{ env.BUILD_TARGET_NAME }}.img
         name: PBRP
-        tag_name: ${{ github.run_id }}
+        tag_name: PBRP
         body: |
           Build: ${{ github.event.inputs.MANIFEST_BRANCH }}
           Device: [Device Tree/Branch](${{ github.event.inputs.DEVICE_TREE }}/tree/${{ github.event.inputs.DEVICE_TREE_BRANCH }})
