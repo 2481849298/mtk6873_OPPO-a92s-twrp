@@ -14,7 +14,9 @@ PRODUCT_SOONG_NAMESPACES += $(DEVICE_PATH)
 
 # OEM otacerts
 PRODUCT_EXTRA_RECOVERY_KEYS += \
-    $(DEVICE_PATH)/security/otacert
+    $(DEVICE_PATH)/security/special_OTA \
+    $(DEVICE_PATH)/security/local_OTA
+
     
 # Dynamic
 PRODUCT_USE_DYNAMIC_PARTITIONS := true
