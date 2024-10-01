@@ -16,3 +16,6 @@ ro.sys.usb.mtp.whql.enable=0
 ro.sys.usb.storage.type=mtp
 ro.vendor.mtk_trustonic_tee_support=1
 ro.build.version.sdk=31
+sys.usb.controller=musb-hdrc
+ro.hardware=MT6873
+ro.vendor.mediatek.platform=mt6873
