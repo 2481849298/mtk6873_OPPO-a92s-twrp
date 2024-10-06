@@ -113,15 +113,6 @@ jobs:
         repo sync -j$(nproc --all) --force-sync
       working-directory: workspace
 
-    - name: rm recovery
-      run: |
-        cd workspace
-        rm -rf ./${{ github.event.inputs.RECOVERY_PATH }}
-        
-    - name: Clone recovery
-      run: |
-        cd workspace
-        git clone ${{ github.event.inputs.RECOVERY_SOURCE_URL }} ./${{ github.event.inputs.RECOVERY_PATH }}
  
     - name: Clone device tree
       run: |
