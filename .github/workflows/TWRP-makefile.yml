@@ -10,7 +10,7 @@ on:
       MANIFEST_BRANCH:
         description: 'MANIFEST_BRANCH'
         required: true
-        default: 'twrp-11'
+        default: 'twrp-12.1'
       DEVICE_TREE_URL:
         description: 'DEVICE_TREE_URL'
         required: true
@@ -113,7 +113,16 @@ jobs:
         repo sync -j$(nproc --all) --force-sync
       working-directory: workspace
 
- 
+     - name: rm recovery
+      run: |
+        cd workspace
+        rm -rf ./${{ github.event.inputs.RECOVERY_PATH }}
+        
+    - name: Clone recovery
+      run: |
+        cd workspace
+        git clone ${{ github.event.inputs.RECOVERY_SOURCE_URL }} ./${{ github.event.inputs.RECOVERY_PATH }}
+        
     - name: Clone device tree
       run: |
         git clone ${{ github.event.inputs.DEVICE_TREE_URL }} -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} ./${{ github.event.inputs.DEVICE_PATH }}
