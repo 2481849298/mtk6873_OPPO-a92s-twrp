@@ -14,39 +14,36 @@ on:
       DEVICE_TREE_URL:
         description: 'DEVICE_TREE_URL'
         required: true
-        default: 'https://github.com/2481849298/mtk6873_OPPO-a92s-twrp'
+        default: 'https://github.com/wu17481748/twrp_device_mtk6853'
       DEVICE_TREE_BRANCH:
         description: 'DEVICE_TREE_BRANCH'
         required: true
-        default: 'android12'
+        default: 'A12'
       DEVICE_PATH:
         description: 'DEVICE_PATH'
         required: true
-        default: 'device/oplus/OP4ABB'
+        default: 'device/MTK/MTK6853'
+      COMMON_TREE_URL:
+        description: 'COMMON_TREE_URL (if no common tree, leave blank)'
+        required: false
+      COMMON_PATH:
+        description: 'COMMON_PATH (if no common tree, leave blank)'
+        required: false
       DEVICE_NAME:
         description: 'DEVICE_NAME'
         required: true
-        default: 'OP4ABB'
+        default: 'MTK6853'
       MAKEFILE_NAME:
         description: 'MAKEFILE_NAME'
         required: true
-        default: 'twrp_OP4ABB'
+        default: 'twrp_MTK6853'
       BUILD_TARGET:
         description: 'BUILD_TARGET'
         required: true
         default: 'recovery'
-      RECOVERY_SOURCE_URL:
-        description: 'RECOVERY_SOURCE_URL'
-        required: true
-        default: 'https://github.com/2481849298/twrp_recovery'
-      RECOVERY_PATH:
-        description: 'RECOVERY_PATH'
-        required: true
-        default: 'bootable/recovery'
-              
+
 jobs:
   build:
-    runs-on: ubuntu-20.04
     if: github.event.repository.owner.id == github.event.sender.id
     runs-on: ubuntu-latest
     permissions:
@@ -113,22 +110,19 @@ jobs:
       run: |
         repo sync -j$(nproc --all) --force-sync
       working-directory: workspace
-
-     - name: rm recovery
-      run: |
-        cd workspace
-        rm -rf ./${{ github.event.inputs.RECOVERY_PATH }}
-        
-    - name: Clone recovery
-      run: |
-        cd workspace
-        git clone ${{ github.event.inputs.RECOVERY_SOURCE_URL }} ./${{ github.event.inputs.RECOVERY_PATH }}
-        
+      
     - name: Clone device tree
       run: |
         git clone ${{ github.event.inputs.DEVICE_TREE_URL }} -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} ./${{ github.event.inputs.DEVICE_PATH }}
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
 
+    - name: Clone common tree
+      if: |
+        github.event.inputs.COMMON_TREE_URL != null
+        && github.event.inputs.COMMON_PATH != null
+      run: |
+        git clone ${{ github.event.inputs.COMMON_TREE_URL }} -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} ./${{ github.event.inputs.COMMON_PATH }}
+      working-directory: ${{ steps.pwd.outputs.workspace-folder }}
 
     - name: Check Build Tree
       uses: haya14busa/action-cond@v1
@@ -162,8 +156,10 @@ jobs:
       with:
         files: | 
           workspace/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/${{ github.event.inputs.BUILD_TARGET }}.img
-        name: twrp
-        tag_name: TWRP
+          workspace/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/*.zip
+          workspace/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/*vendor*.img
+        name: ${{ github.event.inputs.DEVICE_NAME }}-${{ github.run_id }}
+        tag_name: ${{ github.run_id }}
         body: |
           Manifest: ${{ github.event.inputs.MANIFEST_BRANCH }}
           Device: ${{ github.event.inputs.DEVICE_NAME }}
