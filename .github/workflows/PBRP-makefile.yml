@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       MANIFEST_BRANCH:
-        description: 'PBRP Manifest Branch'
+        description: 'MANIFEST_BRANCH'
         required: true
         default: 'android-12.1'
         type: choice
@@ -164,8 +164,8 @@ jobs:
       with:
         files: |
           android-recovery/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/${{ env.BUILD_TARGET_NAME }}.img
-        name: PBRP
-        tag_name: PBRP
+        name: ${{ github.event.inputs.MANIFEST_BRANCH }}-PBRP
+        tag_name: ${{ github.event.inputs.MANIFEST_BRANCH }}-PBRP
         body: |
           Build: ${{ github.event.inputs.MANIFEST_BRANCH }}
           Device: [Device Tree/Branch](${{ github.event.inputs.DEVICE_TREE }}/tree/${{ github.event.inputs.DEVICE_TREE_BRANCH }})

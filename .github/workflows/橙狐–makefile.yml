@@ -125,8 +125,8 @@ jobs:
       with:
         files: |
           ${{ steps.pwd.outputs.workspace-folder }}/fox_${{ github.event.inputs.MANIFEST_BRANCH }}/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/*.img
-        name: 橙狐
-        tag_name: 橙狐
+        name: ${{ github.event.inputs.MANIFEST_BRANCH }}-橙狐
+        tag_name: ${{ github.event.inputs.MANIFEST_BRANCH }}-橙狐
         body: |
           Manifest: ${{ github.event.inputs.MANIFEST_BRANCH }}
           Device: ${{ github.event.inputs.DEVICE_NAME }}
