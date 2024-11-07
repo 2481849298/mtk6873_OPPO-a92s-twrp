@@ -1,6 +1,6 @@
 # Inherit from those products. Most specific first.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
-$(call inherit-product, $(SRC_TARGET_DIR)/product/aosp_base.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/base.mk)
 
 $(call inherit-produc-if-exists, $(SRC_TARGET_DIR)/product/embedded.mk)
 $(call inherit-product-if-exists, $(SRC_TARGET_DIR)/product/languages_full.mk)
@@ -8,17 +8,14 @@ $(call inherit-product-if-exists, $(SRC_TARGET_DIR)/product/languages_full.mk)
 # Installs gsi keys into ramdisk, to boot a developer GSI with verified boot.
 $(call inherit-product-if-exists, $(SRC_TARGET_DIR)/product/gsi_keys.mk)
 
-# Inherit from our custom product configuration
-$(call inherit-product, vendor/twrp/config/common.mk)
-
 # Enable updating of APEXes
 $(call inherit-product-if-exists, $(SRC_TARGET_DIR)/product/updatable_apex.mk)
 
 # Inherit from TWRP-common stuffs, if building TWRP.
-$(call inherit-product-if-exists, vendor/twrp/config/common.mk)
+# $(call inherit-product-if-exists, vendor/twrp/config/common.mk)
 
 # Inherit from PBRP-common stuff, if building PBRP.
-$(call inherit-product-if-exists, vendor/pb/config/common.mk)
+# $(call inherit-product-if-exists, vendor/pb/config/common.mk)
 
 PRODUCT_COPY_FILES += $(call find-copy-subdir-files,*,$(LOCAL_PATH)/recovery/root,recovery/root) \
 	$(LOCAL_PATH)/prebuilt/dtb:dtb.img
