@@ -89,6 +89,8 @@ BOARD_MAIN_PARTITION_LIST := \
 	odm \
 	system_ext
 
+TARGET_COPY_OUT_VENDOR := vendor
+TARGET_COPY_OUT_PRODUCT := product
 
 # Metadata
 TARGET_SYSTEM_PROP := $(DEVICE_PATH)/system.prop
