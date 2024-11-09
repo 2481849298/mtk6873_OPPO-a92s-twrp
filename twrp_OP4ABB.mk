@@ -17,7 +17,7 @@ $(call inherit-product-if-exists, $(SRC_TARGET_DIR)/product/updatable_apex.mk)
 # Inherit from PBRP-common stuff, if building PBRP.
 # $(call inherit-product-if-exists, vendor/pb/config/common.mk)
 
-	
+
 
 $(call inherit-product, device/oplus/OP4ABB/device.mk)	
 ## Device identifier. This must come after all inclusions
