@@ -17,8 +17,6 @@ $(call inherit-product-if-exists, $(SRC_TARGET_DIR)/product/updatable_apex.mk)
 # Inherit from PBRP-common stuff, if building PBRP.
 # $(call inherit-product-if-exists, vendor/pb/config/common.mk)
 
-PRODUCT_COPY_FILES += $(call find-copy-subdir-files,*,$(LOCAL_PATH)/recovery/root,recovery/root) \
-	$(LOCAL_PATH)/prebuilt/dtb:dtb.img
 	
 
 $(call inherit-product, device/oplus/OP4ABB/device.mk)	

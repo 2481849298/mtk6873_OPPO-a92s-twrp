@@ -89,8 +89,6 @@ BOARD_MAIN_PARTITION_LIST := \
 	odm \
 	system_ext
 
-TARGET_COPY_OUT_VENDOR := vendor
-TARGET_COPY_OUT_PRODUCT := product
 
 # Metadata
 TARGET_SYSTEM_PROP := $(DEVICE_PATH)/system.prop
@@ -122,22 +120,30 @@ TW_MAX_BRIGHTNESS := 4095
 TW_DEFAULT_BRIGHTNESS := 1023
 #TW_Y_OFFSET := 85
 #TW_H_OFFSET := -85
+TW_EXCLUDE_TWRP_APP := true
+TW_BACKUP_EXCLUSIONS := /data/fonts/,/data/nandswap
+TW_CUSTOM_CPU_POS := 400
+TW_CUSTOM_CLOCK_POS := 200
+TW_CUSTOM_BATTERY_POS := 800
 TW_NO_SCREEN_BLANK := true
+TW_USE_TOOLBOX := true
 TW_SCREEN_BLANK_ON_BOOT := true
-TARGET_USES_MKE2FS := true
 TW_BRIGHTNESS_PATH := "/sys/class/leds/lcd-backlight/brightness"
 TW_EXCLUDE_APEX := true
+TW_MTP_DEVICE := qq2481849298
 TW_DEVICE_VERSION := kuan-wanjixiaobai777
 TW_INCLUDE_LOGICAL := metadata my_product my_engineering my_company my_carrier my_region my_heytap my_stock my_preload my_manifest opporeserve usb_otg
 BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
 TW_PREPARE_DATA_MEDIA_EARLY := true
 TW_INCLUDE_FB2PNG := true
+TW_FRAMERATE := 120
 TW_CUSTOM_CPU_TEMP_PATH := /sys/class/power_supply/battery/temp
 
 # resetprop and magiskboot
 TW_INCLUDE_RESETPROP := true
 TW_INCLUDE_REPACKTOOLS := true
-TW_INCLUDE_LIBRESETPROP :=true
+TW_INCLUDE_LIBRESETPROP := true
+TW_INCLUDE_LPTOOLS := true
 TW_INCLUDE_BASH := true
 # Debug
 TWRP_INCLUDE_LOGCAT := true
@@ -150,7 +156,7 @@ TW_INCLUDE_FASTBOOTD := true
 # Crypto
 TW_INCLUDE_CRYPTO := true
 TW_INCLUDE_CRYPTO_FBE := true
-TW_USE_FSCRYPT_POLICY := 1
+TW_USE_FSCRYPT_POLICY := true
 TW_INCLUDE_FBE_METADATA_DECRYPT := true
 
 # exFAT FS Support
