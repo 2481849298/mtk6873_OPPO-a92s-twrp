@@ -1,5 +1,7 @@
 import /tee.rc
 import /trustonic.rc
+import /init.recovery.project.rc
+
 on init
     export LD_LIBRARY_PATH /system/lib64:/vendor/lib64:/vendor/lib64/hw
     chmod 0777 /system/bin/modelchange.sh
@@ -8,7 +10,7 @@ on init
 
 on fs
     install_keyring
-
+    write /sys/class/udc/musb-hdrc/device/cmode 1
     write /sys/class/power_supply/usb/otg_switch 1
     write /sys/class/oplus_chg/usb/otg_switch 1
 
