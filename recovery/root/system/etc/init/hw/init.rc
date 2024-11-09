@@ -10,47 +10,31 @@ on early-init
     # Set the security context of /postinstall if present.
     restorecon /postinstall
 
+    # ueventd wants to write to /acct
+    mount cgroup none /acct cpuacct
+    mkdir /acct/uid
     # Copy prebuilt ld.config.txt into linkerconfig directory
     copy /system/etc/ld.config.txt /linkerconfig/ld.config.txt
     chmod 444 /linkerconfig/ld.config.txt
 
     start ueventd
-    start healthd
 
     setprop sys.usb.configfs 0
 
 on init
     export PATH /sbin:/system/bin
+    export LD_LIBRARY_PATH /system/lib64:/vendor/lib64/hw
+
     export ANDROID_ROOT /system
     export ANDROID_DATA /data
     export EXTERNAL_STORAGE /sdcard
-    export LD_LIBRARY_PATH /system/lib64:/vendor/lib64/hw:/sbin
-    
+
     symlink /proc/self/fd/0 /dev/stdin
     symlink /proc/self/fd/1 /dev/stdout
     symlink /proc/self/fd/2 /dev/stderr
 
-    symlink /system/etc /etc
     symlink /system/bin /bin
-    # Mount binderfs
-    mkdir /dev/binderfs
-    mount binder binder /dev/binderfs stats=global
-    chmod 0755 /dev/binderfs
-
-    # Mount fusectl
-    mount fusectl none /sys/fs/fuse/connections
-
-    symlink /dev/binderfs/binder /dev/binder
-    symlink /dev/binderfs/hwbinder /dev/hwbinder
-    symlink /dev/binderfs/vndbinder /dev/vndbinder
-
-    # Create location for fs_mgr to store abbreviated output from filesystem
-    # checker programs.
-    mkdir /dev/fscklogs 0770 root system
-    
-    chmod 0666 /dev/binderfs/hwbinder
-    chmod 0666 /dev/binderfs/binder
-    chmod 0666 /dev/binderfs/vndbinder
+    symlink /system/etc /etc
 
     mount cgroup none /acct cpuacct
     mkdir /acct/uid
@@ -70,18 +54,25 @@ on init
 
     chown root shell /tmp
     chmod 0775 /tmp
-
     mkdir /tmp/misc
     mkdir /tmp/misc/keystore/
+
     write /proc/sys/kernel/panic_on_oops 1
     write /proc/sys/vm/max_map_count 1000000
 
-    #Fangfang.Hui@PSW.AD.Ota.1122242, 2016/08/15, Add for check and autorepair ext4 filesystem partitions in recovery mode
-    exec /sbin/e2fsck -y /dev/block/platform/mtk-msdc.0/by-name/cache
-    exec /sbin/e2fsck -y /dev/block/platform/mtk-msdc.0/by-name/userdata
+    mkdir /dev/binderfs
+    mount binder binder /dev/binderfs stats=global
+    chmod 0755 /dev/binderfs
+    chmod 0666 /dev/binderfs/hwbinder
+    chmod 0666 /dev/binderfs/binder
+    chmod 0666 /dev/binderfs/vndbinder
+    symlink /dev/binderfs/binder /dev/binder
+    symlink /dev/binderfs/hwbinder /dev/hwbinder
+    symlink /dev/binderfs/vndbinder /dev/vndbinder
 
-    #mount ext4 /dev/block/bootdevice/by-name/userdata /data rw
-    setprop persist.sys.firstlaunch false
+    # Create location for fs_mgr to store abbreviated output from filesystem
+    # checker programs.
+    mkdir /dev/fscklogs 0770 root system
 
     #ifndef OPLUS_FEATURE_RECOVERY_RESET
     #Yang.Li@ANDROID.STORAGE, 2017/12/19, Remove for can't umount /vendor in OTA update
@@ -93,30 +84,15 @@ on init
     #setprop vendor.gatekeeper.disable_spu true
     #endif /* OPLUS_FEATURE_RECOVERY_RESET */
 
-    #ifdef OPLUS_FEATURE_PHOENIX_RECOVERY
-    start phoenix_recovery
-    #endif
-
 on boot
     ifup lo
     hostname localhost
     domainname localdomain
-    exec u:r:recovery:s0 root root -- /system/bin/cp -af /res/OplusOS/. /res
-    exec u:r:recovery:s0 root root -- /system/bin/cp -arf /vendor/app/mcRegistry/. /odm/vendor/app/mcRegistry/
+
     class_start default
 
-on boot && property:ro.crypto.state=encrypted && property:ro.crypto.type=file
-    load_fastboot_adb_props
-
-# Load properties from /system/ + /factory after fs mount.
-on load_system_props_action
-    load_system_props
-
-on load_persist_props_action
-    load_persist_props
-
 on firmware_mounts_complete
-   rm /dev/.booting
+    rm /dev/.booting
 
 # Mount filesystems and start core system services.
 on late-init
@@ -125,64 +101,25 @@ on late-init
     trigger post-fs
     trigger post-fs-data
 
-    # Load properties from /system/ + /factory after fs mount. Place
-    # this in another action so that the load will be scheduled after the prior
-    # issued fs triggers have completed.
-    trigger load_system_props_action
-    trigger load_persist_props_action
-
     # Remove a file to wake up anything waiting for firmware
     trigger firmware_mounts_complete
 
     trigger early-boot
     trigger boot
 
-#on property:sys.powerctl=*
-#   powerctl ${sys.powerctl}
-
-service console /system/bin/sh
-    class core
-    console
-    user root
-    group shell log readproc
-    seclabel u:r:recovery:s0
-
-#ifdef OPLUS_FEATURE_PHOENIX_RECOVERY
-service phoenix_recovery /system/bin/phoenix_recovery
-    critical
-    seclabel u:r:recovery:s0
-#endif /* OPLUS_FEATURE_PHOENIX_RECOVERY */
-
+on post-fs-data
     # Set fscklog permission
     chown root system /dev/fscklogs/log
     chmod 0770 /dev/fscklogs/log
-    
+
 service ueventd /system/bin/ueventd
     critical
-    seclabel u:r:recovery:s0
+    seclabel u:r:ueventd:s0
 
-service healthd /system/bin/android.hardware.health@2.1-service -r
-    seclabel u:r:recovery:s0
-
-service charger /system/bin/charger
-    seclabel u:r:recovery:s0
-
-service recovery /system/bin/recovery
-    socket recovery stream 422 system system
-    seclabel u:r:recovery:s0
-
-service adbd /system/bin/adbd --root_seclabel=u:r:recovery:s0 --device_banner=recovery
+service adbd /system/bin/adbd --root_seclabel=u:r:su:s0 --device_banner=recovery
     disabled
     socket adbd stream 660 system system
-    seclabel u:r:recovery:s0
-
-service logd /system/bin/logd
-    class core
-    socket logd stream 0666 logd logd
-    socket logdr seqpacket 0666 logd logd
-    socket logdw dgram 0222 logd logd
-    group root system
-    seclabel u:r:recovery:s0
+    seclabel u:r:adbd:s0
 
 # Always start adbd on userdebug and eng builds
 on property:ro.debuggable=1
@@ -193,7 +130,7 @@ on property:ro.debuggable=1
 # Always start adbd on userdebug and eng builds
 on fs && property:ro.debuggable=1
     setprop sys.usb.config adb
-    
+
 service fastbootd /system/bin/fastbootd
     disabled
     group system
@@ -202,10 +139,6 @@ service fastbootd /system/bin/fastbootd
 # Restart adbd so it can run as root
 on property:service.adb.root=1
     restart adbd
-
-# Always start adbd on userdebug and eng builds
-on fs && property:ro.debuggable=1
-    setprop sys.usb.config adb
 
 on fs && property:sys.usb.configfs=1
     mount configfs none /config
@@ -229,22 +162,20 @@ on fs && property:sys.usb.configfs=0
 
 on fs
     mount pstore pstore /sys/fs/pstore
-    mkdir /dev/usb-ffs 0775 shell shell
-    mkdir /dev/usb-ffs/adb 0770 shell shell
+    mkdir /dev/usb-ffs 0770 shell shell
+    write /sys/class/udc/musb-hdrc/device/cmode 1
     write /sys/class/power_supply/usb/otg_switch 1
     write /sys/class/oplus_chg/usb/otg_switch 1
+    mkdir /dev/usb-ffs/adb 0770 shell shell
     mount functionfs adb /dev/usb-ffs/adb uid=2000,gid=2000
     mkdir /dev/usb-ffs/fastboot 0770 system system
     mount functionfs fastboot /dev/usb-ffs/fastboot rmode=0770,fmode=0660,uid=1000,gid=1000
 
 on property:sys.usb.config=adb
     start adbd
-    start console
-    start logd
 
 on property:sys.usb.config=fastboot
     start fastbootd
-    setprop sys.usb.configfs 1
 
 on property:sys.usb.config=none && property:sys.usb.configfs=0
     stop adbd
@@ -298,5 +229,4 @@ on property:sys.usb.config=fastboot && property:sys.usb.ffs.ready=1 && property:
     write /config/usb_gadget/g1/configs/b.1/strings/0x409/configuration "fastboot"
     symlink /config/usb_gadget/g1/functions/ffs.fastboot /config/usb_gadget/g1/configs/b.1/f1
     write /config/usb_gadget/g1/UDC ${sys.usb.controller}
-    write /sys/class/udc/musb-hdrc/device/cmode 1
     setprop sys.usb.state ${sys.usb.config}
