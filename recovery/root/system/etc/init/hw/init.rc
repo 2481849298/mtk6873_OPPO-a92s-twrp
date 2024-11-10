@@ -45,6 +45,8 @@ on init
     mkdir /usb_otg
     mkdir /system
     mkdir /data
+    mkdir /odm
+    mkdir /odm
     symlink /data/cache /cache
     mkdir /sideload
     mkdir /mnt/system

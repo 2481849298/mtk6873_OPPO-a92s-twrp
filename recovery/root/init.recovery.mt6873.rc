@@ -7,7 +7,7 @@ on init
     chmod 0777 /system/bin/modelchange.sh
     # Create a more standard /dev/block layout for our scripts
     symlink /dev/block/platform/bootdevice /dev/block/bootdevice
-
+    symlink /vendor/app /odm/vendor/app
 on fs
     install_keyring
     write /sys/class/udc/musb-hdrc/device/cmode 1
