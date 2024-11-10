@@ -82,10 +82,7 @@ my_preload.x /my_preload ext4 ro wait,logical,first_stage_mount,nofail
 /dev/block/by-name/dtbo /dtbo emmc defaults defaults
 /dev/block/by-name/otp /otp emmc defaults defaults
 /dev/block/by-name/vbmeta /vbmeta emmc defaults defaults
-/dev/block/sdd1 /usb_otg vfat nosuid,nodev defaults
 /dev/block/by-name/persist /mnt/vendor/persist ext4 noatime,nosuid,nodev,noauto_da_alloc,commit=1,nodelalloc wait,check,formattable
 /devices/platform/externdevice* auto auto defaults voldmanaged=sdcard1:auto
 /devices/platform/11200000.usb_xhci* auto vfat defaults voldmanaged=usbotg:auto
-/dev/block/by-name/my_custom /my_custom ext4 ro wait,nofail
-/dev/block/by-name/special_preload /special_preload ext4 ro wait,nofail
 /dev/block/by-name/cdt_engineering /cdt_engineering emmc defaults defaults

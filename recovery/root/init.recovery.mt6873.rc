@@ -10,24 +10,9 @@ on init
     symlink /vendor/app /odm/vendor/app
 on fs
     install_keyring
-    write /sys/class/udc/musb-hdrc/device/cmode 1
-    write /sys/class/power_supply/usb/otg_switch 1
-    write /sys/class/oplus_chg/usb/otg_switch 1
 
 on post-fs
 
-service keystore_auth /system/bin/keystore_auth
-    oneshot
-    user system
-    group root
-    disabled
-    seclabel u:r:recovery:s0
-
-service keystore /system/bin/keystore /tmp/misc/keystore
-    user root
-    group root drmrpc readproc log
-    disabled
-    seclabel u:r:recovery:s0
     
 
 service modelchange /system/bin/modelchange.sh

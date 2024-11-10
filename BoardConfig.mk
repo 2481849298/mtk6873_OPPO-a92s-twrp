@@ -131,7 +131,6 @@ TW_USE_TOOLBOX := true
 TW_SCREEN_BLANK_ON_BOOT := true
 TW_BRIGHTNESS_PATH := "/sys/class/leds/lcd-backlight/brightness"
 TW_EXCLUDE_APEX := true
-TW_MTP_DEVICE := qq2481849298
 TW_DEVICE_VERSION := kuan-wanjixiaobai777
 TW_INCLUDE_LOGICAL := metadata my_product my_engineering my_company my_carrier my_region my_heytap my_stock my_preload my_manifest opporeserve usb_otg
 BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true

@@ -52,7 +52,6 @@ on init
     mkdir /mnt/system
     mkdir /rbr
     mount tmpfs tmpfs /tmp size=80%
-    mount ext4 /dev/block/by-name/oplusreserve2    /rbr
 
     chown root shell /tmp
     chmod 0775 /tmp
